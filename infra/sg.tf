@@ -93,7 +93,7 @@ resource "aws_security_group" "gitlab-sg" {
   }
 
   ingress {
-    description      = "https"
+    description      = "https self"
     from_port        = 443
     to_port          = 443
     protocol         = "tcp"
@@ -101,9 +101,9 @@ resource "aws_security_group" "gitlab-sg" {
   }
 
   ingress {
-    description      = "https"
-    from_port        = 443
-    to_port          = 443
+    description      = "http self"
+    from_port        = 80
+    to_port          = 80
     protocol         = "tcp"
     self = true
   }

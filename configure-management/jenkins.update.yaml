@@ -1,0 +1,24 @@
+- name: Jenkins tools update Linux
+  hosts: jenkins
+  become: true
+  tasks:
+    - name: 'yum update'
+      yum:
+        update_cache: yes
+
+    - name: 'update jenkins'
+      shell: |
+        sudo yum info jenkins
+        sudo systemctl stop jenkins
+        sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+        sudo yum update jenkins
+        sudo systemctl start jenkins
+
+    # Debug
+    - name: 'Debug Status Jenkins'
+      shell: sudo systemctl status jenkins
+      register: jenkins_status
+
+    - name: 'Debug Jenkins'
+      debug:
+        var: jenkins_status.stdout_lines

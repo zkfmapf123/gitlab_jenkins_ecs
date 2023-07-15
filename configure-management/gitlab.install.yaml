@@ -1,0 +1,31 @@
+- name: Gitlab tools on Linux
+  hosts: gitlab
+  become: true
+  vars_prompt:
+    - name: EXTERNAL_URL
+      prompt: 'Input Gitlab EXTERNAL_URL : '
+      private: false
+
+  tasks:
+    ## 변수 매핑
+    - name: 'Setting Jenkins Connection Variables'
+      set_fact:
+        jenkins_host: "{{ hostvars['gitlab-linux1'].ansible_host }}"
+
+    - name: 'yum update'
+      yum:
+        update_cache: yes
+
+    - name: 'install tools'
+      yum:
+        name:
+          - htop
+        state: present
+
+    - name: 'install gitlab'
+      shell: |
+        sudo yum install -y curl policycoreutils-python openssh-server openssh-clients perl
+        sudo systemctl enable sshd
+        sudo systemctl start sshd
+        curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | sudo bash
+        sudo EXTERNAL_URL="https://{{ EXTERNAL_URL }}" yum install -y gitlab-ee

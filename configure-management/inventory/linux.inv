@@ -1,0 +1,9 @@
+[linux]
+jenkins-linux1 ansible_host= 
+gitlab-linux2 ansible_host=
+
+[jenkins]
+jenkins-linux1 ansible_host=3.36.142.12 ansible_user=ec2-user ansible_ssh_private_key_file=~/.ssh/id_rsa
+
+[gitlab]
+gitlab-linux
